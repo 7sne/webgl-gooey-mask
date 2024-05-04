@@ -1,0 +1,191 @@
+@use "../styles/mixins" as mix;
+
+@mixin line {
+  content: "";
+  position: absolute;
+  height: 1px;
+  width: 100%;
+  background-color: var(--primary-foreground);
+}
+
+.navigation {
+  & > nav {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-lg);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: var(--primary-foreground);
+    background-color: var(--primary-background);
+    z-index: 9992;
+
+    & > a {
+      display: flex;
+      align-items: center;
+      gap: 0 var(--space-xxs);
+      font: var(--font-primary);
+      font-size: var(--text-lg);
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 0.9;
+      letter-spacing: -0.005em;
+    }
+
+    & > .menu {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0 var(--space-lg);
+      justify-content: space-around;
+
+      & > li {
+        position: relative;
+        gap: 0 var(--space-sm);
+        margin-right: var(--space-lg);
+        cursor: pointer;
+
+        & > :first-child {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          display: block;
+          width: 0.8px;
+          height: var(--space-xl);
+          background-color: var(--primary-foreground);
+        }
+
+        & > :last-child {
+          display: block;
+          color: var(--primary-foreground);
+          font-size: var(--text-md);
+          font-weight: 300;
+          padding-left: var(--space-sm);
+          margin-top: 0.2em;
+        }
+
+        &:nth-child(1) {
+          & > :first-child {
+            transition-delay: 0.15s;
+          }
+        }
+
+        &:nth-child(2) {
+          & > :first-child {
+            transition-delay: 0.2s;
+          }
+        }
+
+        &:nth-child(3) {
+          & > :first-child {
+            transition-delay: 0.25s;
+          }
+        }
+      }
+
+      & > li:not(hover) {
+        & > :first-child {
+          transition: height 0.6s cubic-bezier(0.175, 0.885, 0.42, 1.075) !important;
+          transition-delay: 0s !important;
+        }
+      }
+    }
+
+    & > button.desktop {
+      @include mix.button;
+    }
+
+    & > button.mobile {
+      all: unset;
+      position: relative;
+      width: var(--space-lg);
+      height: var(--space-md);
+
+      & > span {
+        @include line;
+      }
+
+      &::before {
+        @include line;
+        top: 0;
+      }
+
+      &::after {
+        @include line;
+        bottom: 0;
+      }
+    }
+  }
+
+  & > .navigationExpanded {
+    content: "";
+    position: fixed;
+    z-index: 9991;
+    width: 100%;
+    height: 240px;
+    background-color: var(--primary-background);
+    transform: translateY(-150%);
+    animation: navigationExpandedReverse 1.6s
+      cubic-bezier(0.175, 0.685, 0.42, 1.075);
+
+    &__expanded {
+      transform: translateY(0%);
+      animation: navigationExpaneded 0.6s
+        cubic-bezier(0.175, 0.685, 0.42, 1.075);
+    }
+  }
+}
+
+@keyframes navigationExpaneded {
+  from {
+    transform: translateY(-150%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes navigationExpandedReverse {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-150%);
+  }
+}
+
+@media (min-width: 1px) and (max-width: 768px) {
+  .navigation {
+    & > nav {
+      & > .menu {
+        display: none;
+      }
+
+      & > button.desktop {
+        display: none;
+      }
+
+      & > button.mobile {
+        display: block;
+      }
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  .navigation {
+    & > nav {
+      & > button.mobile {
+        display: none;
+      }
+
+      & > button.desktop {
+        display: block;
+      }
+    }
+  }
+}
